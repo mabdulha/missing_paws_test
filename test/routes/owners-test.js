@@ -226,5 +226,13 @@ describe("Owners", () => {
           });
       });
     });
+    describe("when the id is invalid", (done) => {
+      it("should return a 404 and a message for invalid owner id", () => {
+        return request(server)
+          .put("/owners/9999999/update")
+          .expect(404)
+          .expect({message: 'Cannot find owner associated with that id'});
+      });
+    });
   });
 });
