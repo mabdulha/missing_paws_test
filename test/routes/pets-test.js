@@ -138,4 +138,33 @@ describe("Pets", () => {
         });
     });
   });
+  describe("GET /pets/:id", () => {
+    describe("when the id is valid", () => {
+      it("should return the matching pet", done => {
+        request(server)
+          .get(`/pets/${validID}`)
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .end((err, res) => {
+            expect(res.body[0]).to.have.property("name", "Tweety")
+            expect(res.body[0]).to.have.property("type", "Bird")
+            done(err)
+          });
+      });
+    });
+    describe("when the id is invalid", () => {
+      it("should return the NOT found message", done => {
+        request(server)
+          .get("/pets/123")
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(404)
+          .end((err, res) => {
+            expect(res.body.message).include("Pet not found")
+            done(err)
+          });
+      });
+    });
+  });
 });
