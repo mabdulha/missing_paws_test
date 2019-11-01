@@ -164,4 +164,30 @@ describe("Owners", () => {
         });
     });
   });
+  describe("Delete /owners/:id", () => {
+    describe("when the id is valid", () => {
+      it("should return a message when the owner is deleted", () => {
+        return request(server)
+          .delete(`/owners/${validID}`)
+          .expect(200)
+          .then(res => {
+            expect(res.body).to.include({
+              message: "Owner successfully deleted"
+            })
+          });
+      });
+    });
+  });
+  describe("when the id is invalid", () => {
+    it("should return a message when owner can not be found", () => {
+      request(server)
+        .delete("/owners/123456")
+        .expect(404)
+        .then(res => {
+          expect(res.body).to.include({
+            message: "Owner not deleted"
+          })
+        });
+    });
+  });
 }); 
