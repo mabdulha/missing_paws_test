@@ -70,5 +70,42 @@ describe("Owners", () => {
       console.log(error);
     }
   });
-  //TODO
+  describe("GET /owners", () => {
+    it("should GET all the owners", done => {
+      request(server)
+        .get("/owners")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          try {
+            expect(res.body).to.be.a("array");
+            expect(res.body.length).to.equal(2);
+            let result = _.map(res.body, owner => {
+              return {
+                firstname: owner.firstname,
+                lastname: owner.lastname,
+                phoneNum: owner.phoneNum,
+                email: owner.email
+              };
+            });
+            expect(result).to.deep.include({
+              firstname: "Mozeeb",
+              lastname: "Abdulha",
+              phoneNum: "0897456321",
+              email: "ma@gmail.com"
+            });
+            expect(result).to.deep.include({
+              firstname: "Jack",
+              lastname: "Dolan",
+              phoneNum: "0836598741",
+              email: "jd@gmail.com"
+            });
+            done();
+          } catch (e) {
+            done(e);
+          }
+        });
+    });
+  });
 });
