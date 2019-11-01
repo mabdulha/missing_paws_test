@@ -108,4 +108,33 @@ describe("Owners", () => {
         });
     });
   });
+  describe("GET /owners/:id", () => {
+    describe("when the id is valid", () => {
+      it("should return the matching owner", done => {
+        request(server)
+          .get(`/owners/${validID}`)
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .end((err, res) => {
+            expect(res.body[0]).to.have.property("firstname", "Mozeeb")
+            expect(res.body[0]).to.have.property("lastname", "Abdulha")
+            done(err)
+          });
+      });
+    });
+    describe("when the id is invalid", () => {
+      it("should return the NOT found message", done => {
+        request(server)
+          .get("/owners/123")
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(404)
+          .end((err, res) => {
+            expect(res.body.message).include("Owner not found")
+            done(err)
+          });
+      });
+    });
+  });
 });
