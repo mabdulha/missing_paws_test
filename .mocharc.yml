@@ -1,0 +1,3 @@
+file:
+    - test/routes/pets-test.js
+timeout: 6000;

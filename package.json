@@ -1,0 +1,29 @@
+{
+  "name": "missing-paws",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "mocha test/routes/pets-test.js --exit"
+  },
+  "dependencies": {
+    "beautifier": "^0.1.7",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "fuse.js": "^3.4.5",
+    "http-errors": "~1.6.3",
+    "lodash": "^4.17.15",
+    "mongodb": "^3.3.3",
+    "mongoose": "^5.7.5",
+    "mongoose-fuzzy-searching": "^1.1.8",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^6.2.0",
+    "supertest": "^4.0.2",
+    "mongodb-memory-server": "^5.2.7"
+  }
+}
