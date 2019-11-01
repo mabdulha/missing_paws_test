@@ -41,7 +41,7 @@ describe("Owners", () => {
     try {
       // was having alot of trouble with this solution found here
       // https://mongoosejs.com/docs/api.html#connection_Connection-dropDatabase
-      await conn.dropDatabase();
+      //  await conn.dropDatabase();
     } catch (error) {
       console.log(error);
     }
@@ -190,4 +190,41 @@ describe("Owners", () => {
         });
     });
   });
-}); 
+  describe("PUT /owners/:id/update", () => {
+    describe("when the id is valid", () => {
+      it("should return a message and update owner details", () => {
+        return request(server)
+          .put(`/owners/${validID}/update`)
+          .send({
+            firstname: "Bob"
+          })
+          .send({
+            email: "bob@gmail.com"
+          })
+          .expect(200)
+          .then(resp => {
+            expect(resp.body).to.include({
+              message: 'Owner updated successfully'
+            });
+            expect(resp.body.data).to.include({
+              firstname: "Bob",
+              email: "bob@gmail.com"
+            });
+          });
+      });
+      after(() => {
+        return request(server)
+          .get(`/owners/${validID}`)
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .then(res => {
+            expect(res.body[0]).to.include({
+              firstname: "Bob",
+              email: "bob@gmail.com"
+            });
+          });
+      });
+    });
+  });
+});
