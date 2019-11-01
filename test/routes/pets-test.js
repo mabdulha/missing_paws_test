@@ -82,5 +82,60 @@ describe("Pets", () => {
       console.log(error);
     }
   });
-  //TODO
+  describe("GET /pets", () => {
+    it("should GET all the pets", done => {
+      request(server)
+        .get("/pets")
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          try {
+            expect(res.body).to.be.a("array");
+            expect(res.body.length).to.equal(2);
+            let result = _.map(res.body, pet => {
+              return {
+                name: pet.name,
+                type: pet.type,
+                species: pet.species,
+                gender: pet.gender,
+                colour: pet.colour,
+                size: pet.size,
+                age: pet.age,
+                lastSeenAddress: pet.lastSeenAddress,
+                missing: pet.missing,
+                ownerID: pet.ownerID
+              };
+            });
+            expect(result).to.deep.include({
+              name: "Charlie",
+              type: "Dog",
+              species: "Pitbull",
+              gender: "Male",
+              colour: "black",
+              size: "2 meters",
+              age: "5 years",
+              lastSeenAddress: "12 Walking Street, Waterford",
+              missing: true,
+              ownerID: "5db4bbff17b11a286ca06200"
+            });
+            expect(result).to.deep.include({
+              name: "Tweety",
+              type: "Bird",
+              species: "Canary",
+              gender: "Female",
+              colour: "Yellow",
+              size: "0.2 meters",
+              age: "10 years",
+              lastSeenAddress: "5 High Street, Kilkenny",
+              missing: false,
+              ownerID: "5db4bbff17b11a286ca061ff"
+            });
+            done();
+          } catch (e) {
+            done(e);
+          }
+        });
+    });
+  });
 });
