@@ -3,6 +3,7 @@ const expect = chai.expect;
 const request = require("supertest");
 const MongoMemoryServer = require("mongodb-memory-server").MongoMemoryServer;
 const Owner = require("../../models/owners");
+const Pet = require("../../models/pets")
 const mongoose = require("mongoose");
 
 const _ = require("lodash");
@@ -226,12 +227,28 @@ describe("Owners", () => {
           });
       });
     });
-    describe("when the id is invalid", (done) => {
+    describe("when the id is invalid", () => {
       it("should return a 404 and a message for invalid owner id", () => {
         return request(server)
           .put("/owners/9999999/update")
           .expect(404)
           .expect({message: 'Cannot find owner associated with that id'});
+      });
+    });
+  });
+  describe("GET /owners/:id/pets", () => {
+    describe("when the id is valid", () => {
+      it("should return the owners pets", () => {
+        request(server)
+        .get(`owners/${validID}/pets`)
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err,res) => {
+          expect(res.body[0]).to.have.property("name", "Charlie")
+          expect(res.body[0]).to.have.property("species", "Pitbull")
+          done(err)
+        });
       });
     });
   });
