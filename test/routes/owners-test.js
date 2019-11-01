@@ -137,4 +137,31 @@ describe("Owners", () => {
       });
     });
   });
+  describe("Post /owners", () => {
+    it("should return a confirm message and update the database", () => {
+      const owner = {
+        firstname: "Mike",
+        lastname: "Doyle",
+        phoneNum: "0123654789",
+        email: "md@gmail.com"
+      }
+      return request(server)
+        .post("/owners")
+        .send(owner)
+        .expect(200)
+        .then(res => {
+          expect(res.body.message).equal("Owner added to database")
+          validID = res.body.data._id
+        });
+    });
+    after(() => {
+      return request(server)
+        .get(`/owners/${validID}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body[0]).to.have.property("firstname", "Mike")
+          expect(res.body[0]).to.have.property("email", "md@gmail.com")
+        });
+    });
+  });
 });
