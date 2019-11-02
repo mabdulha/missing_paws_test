@@ -61,12 +61,12 @@ describe("Relationship", () => {
             owner.phoneNum = "0897456321"
             owner.email = "ma@gmail.com"
             await owner.save()
-            /*owner = new Owner()
+            owner = new Owner()
             owner.firstname = "Jack"
             owner.lastname = "Dolan"
             owner.phoneNum = "0836598741"
             owner.email = "jd@gmail.com"
-            await owner.save()*/
+            await owner.save()
             owner = await Owner.findOne({
                 firstname: "Mozeeb"
             })
@@ -79,7 +79,7 @@ describe("Relationship", () => {
             pet.colour = "black"
             pet.size = "2 meters"
             pet.age = "5 years",
-            pet.lastSeenAddress = "12 Walking Street, Waterford"
+                pet.lastSeenAddress = "12 Walking Street, Waterford"
             pet.views = 2
             pet.missing = true
             pet.ownerID = ownerValidID
@@ -92,7 +92,7 @@ describe("Relationship", () => {
             pet.colour = "Yellow"
             pet.size = "0.2 meters"
             pet.age = "10 years",
-            pet.lastSeenAddress = "5 High Street, Kilkenny"
+                pet.lastSeenAddress = "5 High Street, Kilkenny"
             pet.views = 5
             pet.missing = false
             pet.ownerID = ownerValidID
@@ -139,8 +139,7 @@ describe("Relationship", () => {
                                 lastSeenAddress: "5 High Street, Kilkenny",
                             })
                             done(err)
-                        }
-                        catch(e) {
+                        } catch (e) {
                             done(e)
                         }
                     })
@@ -155,6 +154,19 @@ describe("Relationship", () => {
                         message: "Cannot find owner associated with that id"
                     })
             })
+        })
+    })
+    describe("GET /owners/:id/pets/total", () => {
+        it("should return total number of pets foor the owner passed in params", done => {
+            request(server)
+                .get(`/owners/${ownerValidID}/pets/total`)
+                .set("Accept", "application/json")
+                .expect("Content-Type", /json/)
+                .expect(200)
+                .end((err, res) => {
+                    expect(res.body).to.have.property("total", 2)
+                    done(err)
+                })
         })
     })
 })
