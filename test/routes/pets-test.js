@@ -59,7 +59,8 @@ describe("Pets", () => {
       pet.colour = "black";
       pet.size = "2 meters";
       pet.age = "5 years",
-        pet.lastSeenAddress = "12 Walking Street, Waterford";
+      pet.lastSeenAddress = "12 Walking Street, Waterford";
+      pet.views = 2;
       pet.missing = true;
       pet.ownerID = "5db4bbff17b11a286ca06200";
       await pet.save();
@@ -72,6 +73,7 @@ describe("Pets", () => {
       pet.size = "0.2 meters";
       pet.age = "10 years",
         pet.lastSeenAddress = "5 High Street, Kilkenny";
+      pet.views = 5;
       pet.missing = false;
       pet.ownerID = "5db4bbff17b11a286ca061ff";
       await pet.save();
@@ -211,7 +213,7 @@ describe("Pets", () => {
             expect(res.body).to.include({
               message: "View incremented successfully"
             })
-            expect(res.body.data).to.have.property("views", 1)
+            expect(res.body.data).to.have.property("views", 6)
           });
       });
       after(() => {
@@ -221,7 +223,7 @@ describe("Pets", () => {
           .expect("Content-Type", /json/)
           .expect(200)
           .then(res => {
-            expect(res.body[0]).to.have.property("views", 1)
+            expect(res.body[0]).to.have.property("views", 6)
           });
       });
     });
@@ -289,6 +291,18 @@ describe("Pets", () => {
       return request(server)
         .put("/pets/123654/view")
         .expect(404)
+    });
+  });
+  describe("GET /pets/views", () => {
+    it("should return the total number of views across all pets", () => {
+      request(server)
+      .get(`/pets/views`)
+      .set("Accept", "application/json")
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body).to.have.property("totalViews", 7)
+      });
     });
   });
 });
