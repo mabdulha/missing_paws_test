@@ -336,4 +336,17 @@ describe("Owners", () => {
         });
     });
   });
+  describe("GET /owners/total", () => {
+    it("should return total amount of all the owners", done => {
+      request(server)
+        .get(`/owners/total`)
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.have.property("totalOwners", 2)
+          done(err)
+        });
+    });
+  });
 });
