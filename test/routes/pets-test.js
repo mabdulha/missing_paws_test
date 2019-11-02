@@ -226,4 +226,11 @@ describe("Pets", () => {
       });
     });
   });
+  describe("when the id is invalid", () => {
+    it("should returnn a 404 as id does not exist", () => {
+      return request(server)
+        .put("/pets/123654/view")
+        .expect(404)
+    });
+  });
 });
