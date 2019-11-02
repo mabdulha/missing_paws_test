@@ -432,4 +432,50 @@ describe("Pets", () => {
         });
     });
   });
+  describe("GET /pets/search", () => {
+    it("should return the queried pet", done => {
+      request(server)
+        .get(`/pets/search`)
+        .send({
+          "key": "firstname",
+          "query": "Char"
+        })
+        .expect(200)
+        .end((err, res) => {
+          try {
+            expect(res.body).to.be.a("array");
+            expect(res.body.length).to.equal(1);
+            let result = _.map(res.body, pet => {
+              return {
+                name: pet.name,
+                type: pet.type,
+                species: pet.species,
+                gender: pet.gender,
+                colour: pet.colour,
+                size: pet.size,
+                age: pet.age,
+                lastSeenAddress: pet.lastSeenAddress,
+                missing: pet.missing,
+                ownerID: pet.ownerID
+              };
+            });
+            expect(result).to.deep.include({
+              name: "Charlie",
+              type: "Dog",
+              species: "Pitbull",
+              gender: "Male",
+              colour: "black",
+              size: "2 meters",
+              age: "5 years",
+              lastSeenAddress: "12 Walking Street, Waterford",
+              missing: true,
+              ownerID: "5db4bbff17b11a286ca06200"
+            });
+            done(err);
+          } catch (e) {
+            done(e);
+          }
+        });
+    });
+  });
 });
