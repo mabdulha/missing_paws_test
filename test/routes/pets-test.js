@@ -318,4 +318,17 @@ describe("Pets", () => {
         });
     });
   });
+  describe("GET /pets/totalmissing", () => {
+    it("should return total amount of all the pets", done => {
+      request(server)
+        .get(`/pets/totalmissing`)
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.have.property("totalMissing", 1)
+          done(err)
+        });
+    });
+  });
 });
