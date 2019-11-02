@@ -3,6 +3,7 @@ const expect = chai.expect;
 const request = require("supertest");
 const MongoMemoryServer = require("mongodb-memory-server").MongoMemoryServer;
 const Pet = require("../../models/pets");
+const Owner = require("../../models/owners")
 const mongoose = require("mongoose");
 
 const _ = require("lodash");

@@ -152,12 +152,12 @@ describe("Owners", () => {
         .expect(200)
         .then(res => {
           expect(res.body.message).equal("Owner added to database")
-          validID = res.body.data._id
+          validID2 = res.body.data._id
         });
     });
     after(() => {
       return request(server)
-        .get(`/owners/${validID}`)
+        .get(`/owners/${validID2}`)
         .expect(200)
         .then(res => {
           expect(res.body[0]).to.have.property("firstname", "Mike")
@@ -232,7 +232,9 @@ describe("Owners", () => {
         return request(server)
           .put("/owners/9999999/update")
           .expect(404)
-          .expect({message: 'Cannot find owner associated with that id'});
+          .expect({
+            message: 'Cannot find owner associated with that id'
+          });
       });
     });
   });
@@ -240,15 +242,15 @@ describe("Owners", () => {
     describe("when the id is valid", () => {
       it("should return the owners pets", () => {
         request(server)
-        .get(`owners/${validID}/pets`)
-        .set("Accept", "application/json")
-        .expect("Content-Type", /json/)
-        .expect(200)
-        .end((err,res) => {
-          expect(res.body[0]).to.have.property("name", "Charlie")
-          expect(res.body[0]).to.have.property("species", "Pitbull")
-          done(err)
-        });
+          .get(`owners/${validID}/pets`)
+          .set("Accept", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .end((err, res) => {
+            expect(res.body[0]).to.have.property("name", "Charlie")
+            expect(res.body[0]).to.have.property("species", "Pitbull")
+            done(err)
+          });
       });
     });
     describe("when the id is invalid", () => {
@@ -256,7 +258,19 @@ describe("Owners", () => {
         return request(server)
           .put("/owners/9999999/update")
           .expect(404)
-          .expect({message: 'Cannot find owner associated with that id'});
+          .expect({
+            message: 'Cannot find owner associated with that id'
+          });
+      });
+    });
+  });
+  describe('POST /owners/search', () => {
+    it('should return the queried owner', () => {
+      request(server)
+      .post('/owners/search')
+      .send({'key': 'firstname', 'query': 'Moz'})
+      .end((res) => {
+        expect(res.body).to.include("firstname", "Mozeeb")
       });
     });
   });
