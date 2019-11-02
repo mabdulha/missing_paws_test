@@ -319,7 +319,7 @@ describe("Pets", () => {
     });
   });
   describe("GET /pets/totalmissing", () => {
-    it("should return total amount of all the pets", done => {
+    it("should return total amount of all the missing pets", done => {
       request(server)
         .get(`/pets/totalmissing`)
         .set("Accept", "application/json")
@@ -327,6 +327,19 @@ describe("Pets", () => {
         .expect(200)
         .end((err, res) => {
           expect(res.body).to.have.property("totalMissing", 1)
+          done(err)
+        });
+    });
+  });
+  describe("GET /pets/totalfound", () => {
+    it("should return total amount of all the found pets", done => {
+      request(server)
+        .get(`/pets/totalfound`)
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.have.property("totalFound", 1)
           done(err)
         });
     });
