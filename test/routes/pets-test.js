@@ -201,4 +201,29 @@ describe("Pets", () => {
         });
     });
   });
+  describe("PUT /pets/:id/view", () => {
+    describe("when the id is valid", () => {
+      it("should return a message and the view should increase by 1", () => {
+        return request(server)
+          .put(`/pets/${validID}/view`)
+          .expect(200)
+          .then(res => {
+            expect(res.body).to.include({
+              message: "View incremented successfully"
+            })
+            expect(res.body.data).to.have.property("views", 1)
+          });
+      });
+      after(() => {
+        return request(server)
+          .get(`/pets/${validID}`)
+          .set("Application", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .then(res => {
+            expect(res.body[0]).to.have.property("views", 1)
+          });
+      });
+    });
+  });
 });
