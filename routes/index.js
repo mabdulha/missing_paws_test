@@ -24,7 +24,7 @@ db.once("open", function () {
 /* GET home page. */
 router.get("/", function (req, res) {
     res.render("index", {
-        title: "Missing Paws - Web App"
+        title: "Missing Paws - Agile Software Practice Test Version"
     })
 })
 

@@ -1,4 +1,4 @@
 file:
-    - test/routes/pets-test.js
+    - test/routes/owners-test.js
 require: '@babel/register'
 timeout: 6000;
