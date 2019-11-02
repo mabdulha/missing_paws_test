@@ -316,5 +316,24 @@ describe("Owners", () => {
           }
         });
     });
+    it("should return an error message if the query is blank", done => {
+      request(server)
+        .get(`/owners/search`)
+        .send({
+          "key": "firstname",
+          "query": ""
+        })
+        .expect(200)
+        .end((err, res) => {
+          try {
+            expect(res.body).to.include({
+              message: "Please enter a query to search"
+            })
+            done(err)
+          } catch (e) {
+            done(e);
+          }
+        });
+    });
   });
 });
