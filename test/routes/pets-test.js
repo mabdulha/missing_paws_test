@@ -233,4 +233,18 @@ describe("Pets", () => {
         .expect(404)
     });
   });
+  describe("Delete /pets/:id", () => {
+    describe("when the id is valid", () => {
+      it("should return a message when the pet is deleted", () => {
+        return request(server)
+          .delete(`/pets/${validID}`)
+          .expect(200)
+          .then(res => {
+            expect(res.body).to.include({
+              message: "Pet successfully deleted"
+            })
+          });
+      });
+    });
+  });
 });
