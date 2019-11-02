@@ -59,7 +59,7 @@ describe("Pets", () => {
       pet.colour = "black";
       pet.size = "2 meters";
       pet.age = "5 years",
-      pet.lastSeenAddress = "12 Walking Street, Waterford";
+        pet.lastSeenAddress = "12 Walking Street, Waterford";
       pet.views = 2;
       pet.missing = true;
       pet.ownerID = "5db4bbff17b11a286ca06200";
@@ -296,13 +296,26 @@ describe("Pets", () => {
   describe("GET /pets/views", () => {
     it("should return the total number of views across all pets", () => {
       request(server)
-      .get(`/pets/views`)
-      .set("Accept", "application/json")
-      .expect("Content-Type", /json/)
-      .expect(200)
-      .end((err, res) => {
-        expect(res.body).to.have.property("totalViews", 7)
-      });
+        .get(`/pets/views`)
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.have.property("totalViews", 7)
+        });
+    });
+  });
+  describe("GET /pets/total", () => {
+    it("should return total amount of all the pets", done => {
+      request(server)
+        .get(`/pets/total`)
+        .set("Accept", "application/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.have.property("totalPets", 2)
+          done(err)
+        });
     });
   });
 });
