@@ -388,4 +388,48 @@ describe("Pets", () => {
         });
     });
   });
+  describe("GET '/pets/found", () => {
+    it("should return all the found pets", done => {
+      request(server)
+        .get(`/pets/found`)
+        .set("Accept", "applicatioon/json")
+        .expect("Content-Type", /json/)
+        .expect(200)
+        .end((err, res) => {
+          try {
+            expect(res.body).to.be.a("array");
+            expect(res.body.length).to.equal(1);
+            let result = _.map(res.body, pet => {
+              return {
+                name: pet.name,
+                type: pet.type,
+                species: pet.species,
+                gender: pet.gender,
+                colour: pet.colour,
+                size: pet.size,
+                age: pet.age,
+                lastSeenAddress: pet.lastSeenAddress,
+                missing: pet.missing,
+                ownerID: pet.ownerID
+              };
+            });
+            expect(result).to.deep.include({
+              name: "Tweety",
+              type: "Bird",
+              species: "Canary",
+              gender: "Female",
+              colour: "Yellow",
+              size: "0.2 meters",
+              age: "10 years",
+              lastSeenAddress: "5 High Street, Kilkenny",
+              missing: false,
+              ownerID: "5db4bbff17b11a286ca061ff"
+            });
+            done(err);
+          } catch (e) {
+            done(e);
+          }
+        });
+    });
+  });
 });
