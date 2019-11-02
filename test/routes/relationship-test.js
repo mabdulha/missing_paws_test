@@ -61,12 +61,16 @@ describe("Relationship", () => {
             owner.phoneNum = "0897456321"
             owner.email = "ma@gmail.com"
             await owner.save()
-            owner = new Owner()
+            /*owner = new Owner()
             owner.firstname = "Jack"
             owner.lastname = "Dolan"
             owner.phoneNum = "0836598741"
             owner.email = "jd@gmail.com"
-            await owner.save()
+            await owner.save()*/
+            owner = await Owner.findOne({
+                firstname: "Mozeeb"
+            })
+            ownerValidID = owner._id
             let pet = new Pet()
             pet.name = "Charlie"
             pet.type = "Dog"
@@ -78,7 +82,7 @@ describe("Relationship", () => {
             pet.lastSeenAddress = "12 Walking Street, Waterford"
             pet.views = 2
             pet.missing = true
-            pet.ownerID = "5db4bbff17b11a286ca06200"
+            pet.ownerID = ownerValidID
             await pet.save()
             pet = new Pet()
             pet.name = "Tweety"
@@ -91,12 +95,8 @@ describe("Relationship", () => {
             pet.lastSeenAddress = "5 High Street, Kilkenny"
             pet.views = 5
             pet.missing = false
-            pet.ownerID = "5db4bbff17b11a286ca061ff"
+            pet.ownerID = ownerValidID
             await pet.save()
-            owner = await Owner.findOne({
-                firstname: "Mozeeb"
-            })
-            ownerValidID = owner._id
             pet = await Pet.findOne({
                 name: "Tweety"
             })
@@ -104,5 +104,57 @@ describe("Relationship", () => {
         } catch (error) {
             console.log(error)
         }
+    })
+    describe("GET /owners/:id/pets", () => {
+        describe("when the id is valid", () => {
+            it("should return the owners pets", done => {
+                request(server)
+                    .get(`/owners/${ownerValidID}/pets`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .end((err, res) => {
+                        try {
+                            expect(res.body.length).to.equal(2)
+                            let result = _.map(res.body, pet => {
+                                return {
+                                    name: pet.name,
+                                    type: pet.type,
+                                    species: pet.species,
+                                    gender: pet.gender,
+                                    colour: pet.colour,
+                                    size: pet.size,
+                                    age: pet.age,
+                                    lastSeenAddress: pet.lastSeenAddress,
+                                }
+                            })
+                            expect(result).to.deep.include({
+                                name: "Tweety",
+                                type: "Bird",
+                                species: "Canary",
+                                gender: "Female",
+                                colour: "Yellow",
+                                size: "0.2 meters",
+                                age: "10 years",
+                                lastSeenAddress: "5 High Street, Kilkenny",
+                            })
+                            done(err)
+                        }
+                        catch(e) {
+                            done(e)
+                        }
+                    })
+            })
+        })
+        describe("when the id is invalid", () => {
+            it("should return a 404 and a message for invalid owner id", () => {
+                return request(server)
+                    .put("/owners/9999999/update")
+                    .expect(404)
+                    .expect({
+                        message: "Cannot find owner associated with that id"
+                    })
+            })
+        })
     })
 })
