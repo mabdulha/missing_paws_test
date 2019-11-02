@@ -1,8 +1,8 @@
 let mongoose = require("mongoose")
-var express = require("express")
-var router = express.Router()
+let express = require("express")
+let router = express.Router()
 
-var mongodbUri = "mongodb+srv://moz:mozuser@missing-pets-cluster-rydzh.mongodb.net/missing_pets_test_db?retryWrites=true&w=majority"
+let mongodbUri = "mongodb+srv://moz:mozuser@missing-pets-cluster-rydzh.mongodb.net/missing_pets_test_db?retryWrites=true&w=majority"
 
 mongoose.connect(mongodbUri, {
     useNewUrlParser: true,

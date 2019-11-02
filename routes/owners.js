@@ -2,7 +2,7 @@ let Owner = require("../models/owners")
 let Pet = require("../models/pets")
 let express = require("express")
 let router = express.Router()
-var Fuse = require("fuse.js")
+let Fuse = require("fuse.js")
 
 router.findAll = (req, res) => {
     res.setHeader("Content-Type", "application/json")
@@ -201,14 +201,14 @@ router.searchOwner = (req, res) => {
         if (err) {
             res.send(err)
         } else {
-            var options = {
+            let options = {
                 keys: ["firstname", "lastname", "email"],
                 threshold: 0.3
             }
 
-            var fuse = new Fuse(owners, options)
-            var query = req.body.query
-            var results = fuse.search(query)
+            let fuse = new Fuse(owners, options)
+            let query = req.body.query
+            let results = fuse.search(query)
 
             if (query.length === 0) {
                 res.json({
