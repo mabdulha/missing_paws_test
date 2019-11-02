@@ -264,4 +264,38 @@ describe("Owners", () => {
       });
     });
   });
+  describe("GET /owners/search", () => {
+    it("should return the queried owner", done => {
+      request(server)
+        .get(`/owners/search`)
+        .send({
+          "key": "firstname",
+          "query": "Moz"
+        })
+        .expect(200)
+        .end((err, res) => {
+          try {
+            expect(res.body).to.be.a("array");
+            expect(res.body.length).to.equal(1);
+            let result = _.map(res.body, owner => {
+              return {
+                firstname: owner.firstname,
+                lastname: owner.lastname,
+                phoneNum: owner.phoneNum,
+                email: owner.email
+              };
+            });
+            expect(result).to.deep.include({
+              firstname: "Mozeeb",
+              lastname: "Abdulha",
+              phoneNum: "0897456321",
+              email: "ma@gmail.com"
+            });
+            done();
+          } catch (e) {
+            done(e);
+          }
+        });
+    });
+  });
 });
