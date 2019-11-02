@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 /*eslint no-unused-vars: "off" */
-const chai = require("chai")
+import chai from "chai"
 const expect = chai.expect
-const request = require("supertest")
+import request from "supertest"
 const MongoMemoryServer = require("mongodb-memory-server").MongoMemoryServer
-const Pet = require("../../models/pets")
-const mongoose = require("mongoose")
+import Pet from "../../models/pets"
+import mongoose from "mongoose"
 
-const _ = require("lodash")
+import _ from "lodash"
 let server
 let mongod
 let db

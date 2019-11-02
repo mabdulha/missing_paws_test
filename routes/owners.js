@@ -1,8 +1,8 @@
-let Owner = require("../models/owners")
-let Pet = require("../models/pets")
-let express = require("express")
+import Owner from "../models/owners"
+import Pet from "../models/pets"
+import express from "express"
 let router = express.Router()
-let Fuse = require("fuse.js")
+import Fuse from "fuse.js"
 
 router.findAll = (req, res) => {
     res.setHeader("Content-Type", "application/json")
