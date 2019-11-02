@@ -297,5 +297,24 @@ describe("Owners", () => {
           }
         });
     });
+    it("should return error message if nothing is found", done => {
+      request(server)
+        .get(`/owners/search`)
+        .send({
+          "key": "firstname",
+          "query": "xtcyvgubhinjo"
+        })
+        .expect(200)
+        .end((err, res) => {
+          try {
+            expect(res.body).to.include({
+              message: "No results found for this search term"
+            })
+            done(err)
+          } catch (e) {
+            done(e);
+          }
+        });
+    });
   });
 });
