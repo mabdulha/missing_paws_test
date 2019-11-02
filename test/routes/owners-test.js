@@ -264,14 +264,4 @@ describe("Owners", () => {
       });
     });
   });
-  describe('POST /owners/search', () => {
-    it('should return the queried owner', () => {
-      request(server)
-      .post('/owners/search')
-      .send({'key': 'firstname', 'query': 'Moz'})
-      .end((res) => {
-        expect(res.body).to.include("firstname", "Mozeeb")
-      });
-    });
-  });
 });

@@ -48,11 +48,11 @@ app.delete('/pets/:id', pets.deletePet);
 app.get('/owners', owners.findAll);
 app.get('/owners/:id/pets', owners.findPetsAssociatedWithOwner);
 app.get('/owners/total', owners.findTotalNumberOfOwners);
+app.get('/owners/search', owners.searchOwner);
 app.get('/owners/:id/pets/total', owners.findNumberOfPetsPerOwner);
 app.get('/owners/:id', owners.findOne);
 
 app.post('/owners/', owners.addOwner);
-app.post('/owners/search', owners.searchOwner);
 
 app.put('/owners/:id/update', owners.updateOwner);
 
