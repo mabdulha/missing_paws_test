@@ -112,7 +112,7 @@ router.updateMissingStatus = (req, res) => {
                     });
                 } else {
                     res.json({
-                        message: 'Status updated successfully ',
+                        message: 'Status updated successfully',
                         data: pet
                     });
                 }

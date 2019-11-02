@@ -259,4 +259,27 @@ describe("Pets", () => {
         });
     });
   });
+  describe("Put /pets/:id/status", () => {
+    describe("when the id is invalid", ()=> {
+      it("should update the missing status", () => {
+        return request(server)
+        .put(`/pets/${validID}/status`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.include({message: "Status updated successfully"})
+          expect(res.body.data).to.have.property("missing", true)
+        });
+      });
+      after(() => {
+        return request(server)
+        .get(`/pets/${validID}`)
+          .set("Application", "application/json")
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .then(res => {
+            expect(res.body[0]).to.have.property("missing", true)
+          });
+      });
+    });
+  });
 });
