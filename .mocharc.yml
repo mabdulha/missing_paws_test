@@ -1,4 +1,4 @@
 file:
-    - test/routes/owners-test.js
+    - test/routes/relationship-test.js
 require: '@babel/register'
 timeout: 6000;
