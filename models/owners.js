@@ -1,4 +1,4 @@
-let mongoose = require('mongoose');
+let mongoose = require("mongoose")
 
 let OwnerSchema = new mongoose.Schema({
     firstname: {
@@ -18,9 +18,9 @@ let OwnerSchema = new mongoose.Schema({
         unique: true
     }
 }, {
-    collection: 'owners'
-});
+    collection: "owners"
+})
 
-mongoose.set('useCreateIndex', true);
+mongoose.set("useCreateIndex", true)
 
-module.exports = mongoose.model('Owner', OwnerSchema);
+module.exports = mongoose.model("Owner", OwnerSchema)

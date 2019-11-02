@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 let mongoose = require("mongoose")
 let express = require("express")
 let router = express.Router()

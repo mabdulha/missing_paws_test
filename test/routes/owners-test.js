@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/*eslint no-unused-vars: "off" */
 const chai = require("chai")
 const expect = chai.expect
 const request = require("supertest")
@@ -9,9 +11,7 @@ const _ = require("lodash")
 let server
 let mongod
 let validID
-// eslint-disable-next-line no-unused-vars
 let conn
-// eslint-disable-next-line no-unused-vars
 let db
 
 describe("Owners", () => {

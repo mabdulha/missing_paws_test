@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/*eslint no-unused-vars: "off" */
 const chai = require("chai")
 const expect = chai.expect
 const request = require("supertest")
@@ -8,7 +10,6 @@ const mongoose = require("mongoose")
 const _ = require("lodash")
 let server
 let mongod
-// eslint-disable-next-line no-unused-vars
 let db
 let validID
 let conn
