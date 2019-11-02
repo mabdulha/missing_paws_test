@@ -247,4 +247,16 @@ describe("Pets", () => {
       });
     });
   });
+  describe("when the id is invalid", () => {
+    it("should return a message when pet can not be found", () => {
+      request(server)
+        .delete("/pets/123456")
+        .expect(404)
+        .then(res => {
+          expect(res.body).to.include({
+            message: "Pet not deleted"
+          })
+        });
+    });
+  });
 });
