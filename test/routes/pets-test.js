@@ -171,39 +171,6 @@ describe("Pets", () => {
             })
         })
     })
-    describe("Post /pets", () => {
-        it("should return a confirmation message and update the database", () => {
-            const pet = {
-                name: "Harry",
-                type: "Turtle",
-                species: "Hawksbill Sea Turtle",
-                gender: "Female",
-                colour: "Brown",
-                size: "4 meters",
-                age: "15 years",
-                lastSeenAddress: "5 Parliament Street, Kilkenny",
-                missing: true,
-                ownerID: validID
-            }
-            return request(server)
-                .post(`/owners/${validID}/pets`)
-                .send(pet)
-                .expect(200)
-                .then(res => {
-                    expect(res.body.message).equal("Pet Added to database")
-                    validID = res.body.data._id
-                })
-        })
-        after(() => {
-            return request(server)
-                .get(`/pets/${validID}`)
-                .expect(200)
-                .then(res => {
-                    expect(res.body[0]).to.have.property("name", "Harry")
-                    expect(res.body[0]).to.have.property("gender", "Female")
-                })
-        })
-    })
     describe("PUT /pets/:id/view", () => {
         describe("when the id is valid", () => {
             it("should return a message and the view should increase by 1", () => {

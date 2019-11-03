@@ -30,7 +30,6 @@
     "lodash": "^4.17.15",
     "mongodb": "^3.3.3",
     "mongoose": "^5.7.5",
-    "mongoose-fuzzy-searching": "^1.1.8",
     "morgan": "~1.9.1"
   },
   "devDependencies": {
