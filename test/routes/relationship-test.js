@@ -179,4 +179,47 @@ describe("Relationship", () => {
                 })
         })
     })
+    describe("POST /owners/:id/pets", () => {
+        it("should return a confirm message and update the database", () => {
+            const pet = {
+                name: "Darkie",
+                type: "Cat",
+                species: "Persian Cat",
+                gender: "Female",
+                colour: "Black-Brown",
+                size: "1 meter",
+                age: "1 years",
+                lastSeenAddress: "5 Green View, New Ross",
+                ownerID: ownerValidID
+            }
+            return request(server)
+                .post(`/owners/${ownerValidID}/pets`)
+                .send(pet)
+                .expect(200)
+                .then(res => {
+                    expect(res.body.message).equal("Pet Added to database")
+                    petValidID = res.body.data._id
+                })
+        })
+        after(() => {
+            return request(server)
+                .get(`/pets/${petValidID}`)
+                .expect(200)
+                .then(res => {
+                    expect(res.body[0]).to.have.property("name", "Darkie")
+                    expect(res.body[0]).to.have.property("type", "Cat")
+                    expect(res.body[0]).to.have.property("ownerID", `${ownerValidID}`)
+                })
+        })
+    })
+    describe("when the id is invalid", () => {
+        it("should return a 404 and a message for invalid owner id", () => {
+            return request(server)
+                .put("/owners/9999999/update")
+                .expect(404)
+                .expect({
+                    message: "Cannot find owner associated with that id"
+                })
+        })
+    })
 })
