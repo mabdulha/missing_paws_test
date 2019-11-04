@@ -247,5 +247,4 @@ PUT /owners/9999999/update 404 0.341 ms - 55
   36 passing (5s)
 ~~~
 
-
 [datamodel]: ./img/missing-paws-data-model
