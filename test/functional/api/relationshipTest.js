@@ -4,17 +4,13 @@ import chai from "chai"
 const expect = chai.expect
 import request from "supertest"
 const MongoMemoryServer = require("mongodb-memory-server").MongoMemoryServer
+import { MongoClient } from "mongodb"
 import Owner from "../../../models/owners"
 import Pet from "../../../models/pets"
-import mongoose from "mongoose"
 
-import _ from "lodash"
-let server
-let mongod
-let ownerValidID
-let petValidID
-let conn
-let db
+const _ = require("lodash")
+
+let server, mongod, url, db, connection, ownerValidID, petValidID
 
 describe("Relationship", () => {
     before(async () => {
@@ -23,19 +19,17 @@ describe("Relationship", () => {
                 instance: {
                     port: 27017,
                     dbPath: "./test/database",
-                    dbName: "missing_paws_test_db" // by default generate random dbName
+                    dbName: "petsdb" // by default generate random dbName
                 }
             })
-            // Async Trick - this ensures the database is created before 
-            // we try to connect to it or start the server
-            await mongod.getConnectionString()
-
-            conn = mongoose.createConnection("mongodb://localhost:27017/missing_paws_test_db", {
+            url = await mongod.getConnectionString()
+            connection = await MongoClient.connect(url, {
                 useNewUrlParser: true,
-                useUnifiedTopology: true,
+                useUnifiedTopology: true
             })
+            db = connection.db(await mongod.getDbName())
+            // Must wait for DB setup to complete BEFORE starting the API server
             server = require("../../../bin/www")
-            db = mongoose.connection
         } catch (error) {
             console.log(error)
         }
@@ -43,9 +37,9 @@ describe("Relationship", () => {
 
     after(async () => {
         try {
-            // was having alot of trouble with this solution found here
-            // https://mongoosejs.com/docs/api.html#connection_Connection-dropDatabase
-            //  await conn.dropDatabase();
+            await connection.close()
+            await mongod.stop()
+            await server.close()
         } catch (error) {
             console.log(error)
         }
