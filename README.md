@@ -118,37 +118,133 @@ name: {
 
 ## Sample Test execution.
 
-. . . . . In this section include a listing of the output from running your tests. Simply copy the output from your terminal and past it into a fenced block, as shown below. Do not use a screenshot.
-
 ~~~
-  Catalogue
-    findProductByName
-      ✓ should find a valid product name
-      ✓ should return null for invalid product name
-    removeProductByName
-      ✓ should remove product with a valid name
-      ✓ should return -1 when asked to remove invalid product
-    checkReorder
-      ✓ should return an empty array when no products need reordering
-      ✓ should report those products that need reordering when present
-      ✓ should include products just on their reorder level
-      ✓ should handle an empty catalogue
-    updateStock
-      ✓ should update catalogue when invoice is fully valid
-      ✓ should return invalid product lines, while still applying the valid ones
-      ✓ should throw an error when a line is missing a product name
-      ✓ should throw an error when a line is missing a quantity
-    search
-      ✓ should return products whose name contains the substring
-      ✓ should return products whose price is below the limit
-      ✓ should throw an error when criteria is not valid option
-      boundry cases
-        ✓ should return empty array for no name matches
-        ✓ should return empty array for no products below the limit
-        ✓ should return products whose price is below or on the limit
+ Owners
+    GET /owners
+Successfully Connected to [ admin ]
+GET /owners 200 13.698 ms - 430
+      √ should GET all the owners (40ms)
+    GET /owners/:id
+      when the id is valid
+GET /owners/5dc082021c030d4268d4e1e4 200 9.270 ms - 218
+        √ should return the matching owner
+      when the id is invalid
+GET /owners/123 404 3.767 ms - 218
+        √ should return the NOT found message
+    Post /owners
+POST /owners 200 33.607 ms - 172
+      √ should return a confirm message and update the database (39ms)
+GET /owners/5dc082021c030d4268d4e1ea 200 9.731 ms - 214
+    Delete /owners/:id
+      when the id is valid
+DELETE /owners/5dc082021c030d4268d4e1eb 200 13.448 ms - 40
+        √ should return a message when the owner is deleted
+    when the id is invalid
+      √ should return a message when owner can not be found
+DELETE /owners/123456 404 0.440 ms - 229
+    PUT /owners/:id/update
+      when the id is valid
+PUT /owners/5dc082021c030d4268d4e1ef/update 200 21.415 ms - 177
+        √ should return a message and update owner details
+GET /owners/5dc082021c030d4268d4e1ef 200 6.896 ms - 216
+      when the id is invalid
+PUT /owners/9999999/update 404 0.517 ms - 55
+        √ should return a 404 and a message for invalid owner id
+    GET /owners/search
+GET /owners/search 200 13.321 ms - 133
+      √ should return the queried owner
+GET /owners/search 200 8.390 ms - 51
+      √ should return error message if nothing is found
+GET /owners/search 200 8.090 ms - 44
+      √ should return an error message if the query is blank
+    GET /owners/total
+GET /owners/total 200 8.904 ms - 17
+      √ should return total amount of all the owners
+
+  Pets
+    GET /pets
+GET /pets 200 8.113 ms - 881
+      √ should GET all the pets
+    GET /pets/:id
+      when the id is valid
+GET /pets/5dc082031c030d4268d4e1fe 200 11.085 ms - 442
+        √ should return the matching pet
+      when the id is invalid
+GET /pets/123 404 0.749 ms - 214
+        √ should return the NOT found message
+    PUT /pets/:id/view
+      when the id is valid
+PUT /pets/5dc082041c030d4268d4e202/view 200 18.839 ms - 322
+        √ should return a message and the view should increase by 1
+GET /pets/5dc082041c030d4268d4e202 200 7.911 ms - 442
+    when the id is invalid
+PUT /pets/123654/view 404 0.342 ms - 249
+      √ should returnn a 404 as id does not exist
+    Delete /pets/:id
+      when the id is valid
+DELETE /pets/5dc082041c030d4268d4e206 200 9.967 ms - 38
+        √ should return a message when the pet is deleted
+    when the id is invalid
+      √ should return a message when pet can not be found
+DELETE /pets/123456 404 0.445 ms - 225
+    Put /pets/:id/status
+      when the id is invalid
+PUT /pets/5dc082041c030d4268d4e20a/status 200 17.581 ms - 319
+        √ should update the missing status
+GET /pets/5dc082041c030d4268d4e20a 200 15.114 ms - 441
+    when the id is invalid
+PUT /pets/123654/view 404 0.566 ms - 249
+      √ should returnn a 404 as id does not exist
+    GET /pets/views
+      √ should return the total number of views across all pets
+    GET /pets/total
+GET /pets/views 200 10.745 ms - 16
+GET /pets/total 200 8.091 ms - 15
+      √ should return total amount of all the pets
+    GET /pets/totalmissing
+GET /pets/totalmissing 200 11.957 ms - 18
+      √ should return total amount of all the missing pets
+    GET /pets/totalfound
+GET /pets/totalfound 200 7.691 ms - 16
+      √ should return total amount of all the found pets
+    GET '/pets/missing
+GET /pets/missing 200 8.984 ms - 272
+      √ should return all the missing pets
+    GET '/pets/found
+GET /pets/found 200 8.013 ms - 273
+      √ should return all the found pets
+    GET /pets/search
+GET /pets/search 200 9.210 ms - 272
+      √ should return the queried pet
+GET /pets/search 200 10.431 ms - 51
+      √ should return error message if nothing is found
+GET /pets/search 200 7.752 ms - 44
+      √ should return an error message if the query is blank
+
+  Relationship
+    GET /owners/:id/pets
+      when the id is valid
+GET /owners/5dc082051c030d4268d4e21f/pets 200 14.858 ms - 544
+        √ should return the owners pets
+      when the id is invalid
+PUT /owners/9999999/update 404 0.370 ms - 55
+        √ should return a 404 and a message for invalid owner id
+    GET /owners/:id/pets/total
+GET /owners/5dc082051c030d4268d4e227/pets/total 200 15.791 ms - 11
+      √ should return total number of pets foor the owner passed in params
+    when the id is invalid
+PUT /owners/9999999/update 404 0.545 ms - 55
+      √ should return a 404 and a message for invalid owner id
+    POST /owners/:id/pets
+POST /owners/5dc082061c030d4268d4e22f/pets 200 11.635 ms - 317
+      √ should return a confirm message and update the database
+GET /pets/5dc082061c030d4268d4e233 200 7.286 ms - 445
+    when the id is invalid
+PUT /owners/9999999/update 404 0.341 ms - 55
+      √ should return a 404 and a message for invalid owner id
 
 
-  18 passing (18ms)
+  36 passing (5s)
 ~~~
 
 
