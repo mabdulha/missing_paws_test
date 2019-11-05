@@ -63,6 +63,19 @@ firstname: {
 
 ~~~
 
+ -- Sample output --
+
+ ~~~
+    {
+          "_id": "5dbc702ea8fdae1870ce2137",
+          "firstname": "Mozeeb",
+          "lastname": "Abdulha",
+          "phoneNum": "0897456321",
+          "email": "ma@gmail.com",
+          "__v": 0
+     }
+ ~~~
+
  -- Pet Schema --
 
 ~~~
@@ -115,6 +128,26 @@ name: {
     }
 
 ~~~
+
+ -- Sample output --
+
+ ~~~
+    {
+          "views": 0,
+          "missing": true,
+          "_id": "5dbc705ffe4a240b8ce14622",
+          "name": "Charlie",
+          "type": "Dog",
+          "species": "Pitbull",
+          "gender": "Male",
+          "colour": "black",
+          "size": "2 meters",
+          "age": "5 years",
+          "lastSeenAddress": "12 Walking Street, Waterford",
+          "ownerID": "5db4bbff17b11a286ca06200",
+          "__v": 0
+    }
+ ~~~
 
 ## Sample Test execution.
 
@@ -247,4 +280,4 @@ PUT /owners/9999999/update 404 0.341 ms - 55
   36 passing (5s)
 ~~~
 
-[datamodel]: /img/missing-paws-data-model
+[datamodel]: ./img/missing-paws-data-model.jpg
