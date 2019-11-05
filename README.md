@@ -280,4 +280,4 @@ PUT /owners/9999999/update 404 0.341 ms - 55
   36 passing (5s)
 ~~~
 
-[datamodel]: https://github.com/mabdulha/missing_paws_test/blob/master/img/missing-paws-data-model.jpg
+![datamodel](https://github.com/mabdulha/missing_paws_test/tree/master/img/missing-paws-data-model.jpg)
