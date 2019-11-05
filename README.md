@@ -40,6 +40,8 @@ This project is a Web App which allows pet owners to report their missing pets i
 
 ## Data model.
 
+![][datamodel]
+
  -- Owner Schema --
 
 ~~~
@@ -280,4 +282,4 @@ PUT /owners/9999999/update 404 0.341 ms - 55
   36 passing (5s)
 ~~~
 
-![datamodel](https://github.com/mabdulha/missing_paws_test/tree/master/img/missing-paws-data-model.jpg)
+[datamodel]: ./img/missing-paws-data-model.jpg
