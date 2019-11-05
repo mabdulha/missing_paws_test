@@ -46,7 +46,7 @@ This project is a Web App which allows pet owners to report their missing pets i
 
 ~~~
 
-firstname: {
+    firstname: {
         type: String,
         required: true
     },
@@ -82,7 +82,7 @@ firstname: {
 
 ~~~
 
-name: {
+    name: {
         type: String,
         required: true
     },
