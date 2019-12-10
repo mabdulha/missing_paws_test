@@ -1,3 +1,6 @@
 {
-    "watch": [ "app.js", "models/","routes/", "bin/www" ]
-  }
+    "watch": [ "app.js", "models/","routes/", "bin/www" ],
+    "env": {
+      "MONGO_DB": "mongodb+srv://user:<password>@wit-cluster-roxlt.mongodb.net/test?retryWrites=true&w=majority"
+    }
+}
