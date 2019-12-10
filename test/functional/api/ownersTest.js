@@ -161,7 +161,7 @@ describe("Owners", () => {
     //             })
     //     })
     // })
-    // describe("PUT /owners/:id/update", () => {
+    describe("PUT /owners/:id/update", () => {
         describe("when the id is valid", () => {
             it("should return a message and update owner details", () => {
                 return request(server)
