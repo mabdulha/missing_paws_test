@@ -137,8 +137,7 @@ router.updateOwner = (req, res) => {
     Owner.findById(req.params.id, function (err, owners) {
         if (err) {
             res.status(404).send({
-                message: "Cannot find owner associated with that id",
-                errmsg: err
+                message: "Cannot find owner associated with that id"
             })
         } else {
             if (req.body.firstname) {

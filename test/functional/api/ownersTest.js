@@ -10,7 +10,7 @@ const Owner = require("../../../models/owners")
 
 const _ = require("lodash")
 
-let server, db, client, collection, validID
+let server, db, validID
 
 describe("Ownerss", () => {
     before(async () => {
@@ -118,106 +118,107 @@ describe("Ownerss", () => {
             })
         })
     })
-    // describe("Post /owners/", () => {
-    //     it("should return a confirm message and update the database", () => {
-    //         const owner = {
-    //             firstname: "Mike",
-    //             lastname: "Doyle",
-    //             phoneNum: "0123654789",
-    //             email: "md@gmail.com"
-    //         }
-    //         return request(server)
-    //             .post("/owners/")
-    //             .send(owner)
-    //             .expect(200)
-    //             .then(res => {
-    //                 expect(res.body.message).equal("Owner added to database")
-    //                 validID = res.body.data._id
-    //             })
-    //     })
-    //     after(() => {
-    //         return request(server)
-    //             .get(`/owners/${validID}`)
-    //             .expect(200)
-    //             .then(res => {
-    //                 expect(res.body[0]).to.have.property("firstname", "Mike")
-    //                 expect(res.body[0]).to.have.property("email", "md@gmail.com")
-    //             })
-    //     })
-    // })
-    // describe("PUT /owners/:id/update", () => {
-    //     describe("when the id is valid", () => {
-    //         it("should return a message and update owner details", () => {
-    //             return request(server)
-    //                 .put(`/owners/${validID}/update`)
-    //                 .send({
-    //                     firstname: "Bob"
-    //                 })
-    //                 .send({
-    //                     email: "bob@gmail.com"
-    //                 })
-    //                 .expect(200)
-    //                 .then(resp => {
-    //                     expect(resp.body).to.include({
-    //                         message: "Owner updated successfully"
-    //                     })
-    //                     expect(resp.body.data).to.include({
-    //                         firstname: "Bob",
-    //                         email: "bob@gmail.com"
-    //                     })
-    //                 })
-    //         })
-    //         after(() => {
-    //             return request(server)
-    //                 .get(`/owners/${validID}`)
-    //                 .set("Accept", "application/json")
-    //                 .expect("Content-Type", /json/)
-    //                 .expect(200)
-    //                 .then(res => {
-    //                     expect(res.body[0]).to.include({
-    //                         firstname: "Bob",
-    //                         email: "bob@gmail.com"
-    //                     })
-    //                 })
-    //         })
-    //     })
-    //     describe("when the id is invalid", () => {
-    //         it("should return a 404 and a message for invalid owner id", () => {
-    //             return request(server)
-    //                 .put("/owners/9999999/update")
-    //                 .expect(404)
-    //                 .expect({
-    //                     message: "Cannot find owner associated with that id"
-    //                 })
-    //         })
-    //     })
-    // })
-    // describe("Delete /owners/:id", () => {
-    //     describe("when the id is valid", () => {
-    //         it("should return a message when the owner is deleted", () => {
-    //             return request(server)
-    //                 .delete(`/owners/${validID}`)
-    //                 .expect(200)
-    //                 .then(res => {
-    //                     expect(res.body).to.include({
-    //                         message: "Owner successfully deleted"
-    //                     })
-    //                 })
-    //         })
-    //     })
-    // })
-    // describe("when the id is invalid", () => {
-    //     it("should return a message when owner can not be found", () => {
-    //         request(server)
-    //             .delete("/owners/123456")
-    //             .expect(404)
-    //             .then(res => {
-    //                 expect(res.body).to.include({
-    //                     message: "Owner not deleted"
-    //                 })
-    //             })
-    //     })
-    // })
+    describe("Post /owners/", () => {
+        it("should return a confirm message and update the database", () => {
+            const owner = {
+                firstname: "Mike",
+                lastname: "Doyle",
+                phoneNum: "0123654789",
+                email: "md@gmail.com",
+                password: "secretworldhello"
+            }
+            return request(server)
+                .post("/owners/register")
+                .send(owner)
+                .expect(200)
+                .then(res => {
+                    expect(res.body.message).equal("Owner added to database")
+                    validID = res.body.data._id
+                })
+        })
+        after(() => {
+            return request(server)
+                .get(`/owners/${validID}`)
+                .expect(200)
+                .then(res => {
+                    expect(res.body[0]).to.have.property("firstname", "Mike")
+                    expect(res.body[0]).to.have.property("email", "md@gmail.com")
+                })
+        })
+    })
+    describe("PUT /owners/:id/update", () => {
+        describe("when the id is valid", () => {
+            it("should return a message and update owner details", () => {
+                return request(server)
+                    .put(`/owners/${validID}/update`)
+                    .send({
+                        firstname: "Bob"
+                    })
+                    .send({
+                        email: "bob@gmail.com"
+                    })
+                    .expect(200)
+                    .then(resp => {
+                        expect(resp.body).to.include({
+                            message: "Owner updated successfully"
+                        })
+                        expect(resp.body.data).to.include({
+                            firstname: "Bob",
+                            email: "bob@gmail.com"
+                        })
+                    })
+            })
+            after(() => {
+                return request(server)
+                    .get(`/owners/${validID}`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body[0]).to.include({
+                            firstname: "Bob",
+                            email: "bob@gmail.com"
+                        })
+                    })
+            })
+        })
+        describe("when the id is invalid", () => {
+            it("should return a 404 and a message for invalid owner id", () => {
+                return request(server)
+                    .put("/owners/9999999/update")
+                    .expect(404)
+                    .expect({
+                        message: "Cannot find owner associated with that id"
+                    })
+            })
+        })
+    })
+    describe("Delete /owners/:id", () => {
+        describe("when the id is valid", () => {
+            it("should return a message when the owner is deleted", () => {
+                return request(server)
+                    .delete(`/owners/${validID}`)
+                    .expect(200)
+                    .then(res => {
+                        expect(res.body).to.include({
+                            message: "Owner successfully deleted"
+                        })
+                    })
+            })
+        })
+    })
+    describe("when the id is invalid", () => {
+        it("should return a message when owner can not be found", () => {
+            request(server)
+                .delete("/owners/123456")
+                .expect(404)
+                .then(res => {
+                    expect(res.body).to.include({
+                        message: "Owner not deleted"
+                    })
+                })
+        })
+    })
     describe("GET /owners/search", () => {
         it("should return the queried owner", done => {
             request(server)
