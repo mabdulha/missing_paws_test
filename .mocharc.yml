@@ -1,5 +1,5 @@
 file:
     - test/functional/api/petsTest.js
 require: '@babel/register'
-timeout: 8000
+timeout: 20000
 exit: true

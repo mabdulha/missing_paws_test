@@ -264,7 +264,7 @@ describe("Petss", () => {
                 })
         })
     })
-    describe("GET '/pets/missing", () => {
+    /* describe("GET '/pets/missing", () => {
         it("should return all the missing pets", done => {
             request(server)
                 .get("/pets/missing")
@@ -291,7 +291,7 @@ describe("Petss", () => {
                     }
                 })
         })
-    })
+    })*/
     describe("GET '/pets/found", () => {
         it("should return all the found pets", done => {
             request(server)
