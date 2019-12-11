@@ -11,8 +11,8 @@ const _ = require("lodash")
 
 let server, db, client, collection, validID
 
-describe("Petss", () => {
-    before(async () => {
+describe("Petss", function() {
+    before(async function() {
         try {
             // eslint-disable-next-line no-undef
             client = await MongoClient.connect(process.env.MONGO_URI, {
