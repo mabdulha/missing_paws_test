@@ -146,7 +146,7 @@ describe("Ownerss", () => {
                 })
         })
     }) */
-    describe("PUT /owners/:id/update", () => {
+    /* describe("PUT /owners/:id/update", () => {
         describe("when the id is valid", () => {
             it("should return a message and update owner details", () => {
                 return request(server)
@@ -192,7 +192,7 @@ describe("Ownerss", () => {
                     })
             })
         })
-    })
+    }) */
     describe("Delete /owners/:id", () => {
         describe("when the id is valid", () => {
             it("should return a message when the owner is deleted", () => {
