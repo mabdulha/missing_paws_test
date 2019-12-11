@@ -1,4 +1,8 @@
-﻿# Assignment 1 - Agile Software Practice.
+﻿[![pipeline status](https://gitlab.com/mabdulha/missing-paws-api-cicd/badges/master/pipeline.svg)](https://gitlab.com/mabdulha/missing-paws-api-cicd/commits/master)
+
+[![coverage report](https://gitlab.com/mabdulha/missing-paws-api-cicd/badges/master/coverage.svg)](https://gitlab.com/mabdulha/missing-paws-api-cicd/badges/master/coverage.svg?job=coverage)
+
+# Assignment 1 - Agile Software Practice.
 
 # Missing Paws
 
