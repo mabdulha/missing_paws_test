@@ -3,9 +3,10 @@
 const chai = require("chai")
 const expect = chai.expect
 const request = require("supertest")
-const { MongoClient } = require("mongodb")
+const mongoose = require("mongoose")
 const dotenv = require("dotenv")
 dotenv.config()
+const Owner = require("../../../models/owners")
 
 const _ = require("lodash")
 
@@ -15,14 +16,12 @@ describe("Ownerss", () => {
     before(async () => {
         try {
             // eslint-disable-next-line no-undef
-            client = await MongoClient.connect(process.env.MONGO_URI, {
+            await mongoose.connect(process.env.MONGO_URI, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             })
-            // eslint-disable-next-line no-undef
-            db = client.db(process.env.MONGO_DB)
-            collection = db.collection("owners")
             server = require("../../../bin/www")
+            db = mongoose.connection
         } catch (error) {
             console.log(error)
         }
@@ -30,95 +29,95 @@ describe("Ownerss", () => {
 
     beforeEach(async () => {
         try {
-            await collection.deleteMany({})
-            await collection.insertOne({
+            await Owner.deleteMany({owner})
+            await Owner.insertMany({
                 firstname: "Mozeeb",
                 lastname: "Abdulha",
                 phoneNum: "0897456321",
                 email: "ma@gmail.com",
                 password: "secret123"
             })
-            await collection.insertOne({
+            await Owner.insertMany({
                 firstname: "Jack",
                 lastname: "Dolan",
                 phoneNum: "0836598741",
                 email: "jd@gmail.com",
                 password: "helloworld"
             })
-            const owner = await collection.findOne({lastname: "Abdulha"})
+            const owner = await Owner.findOne({lastname: "Abdulha"})
             validID = owner._id
         } catch (error) {
             console.log(error)
         }
     })
 
-    // describe("GET /owners", () => {
-    //     it("should GET all the owners", done => {
-    //         request(server)
-    //             .get("/owners")
-    //             .set("Accept", "application/json")
-    //             .expect("Content-Type", /json/)
-    //             .expect(200)
-    //             .end((err, res) => {
-    //                 try {
-    //                     expect(res.body).to.be.a("array")
-    //                     expect(res.body.length).to.equal(3)
-    //                     let result = _.map(res.body, owner => {
-    //                         return {
-    //                             firstname: owner.firstname,
-    //                             lastname: owner.lastname,
-    //                             phoneNum: owner.phoneNum,
-    //                             email: owner.email
-    //                         }
-    //                     })
-    //                     expect(result).to.deep.include({
-    //                         firstname: "Mozeeb",
-    //                         lastname: "Abdulha",
-    //                         phoneNum: "0897456321",
-    //                         email: "ma@gmail.com"
-    //                     })
-    //                     expect(result).to.deep.include({
-    //                         firstname: "Jack",
-    //                         lastname: "Dolan",
-    //                         phoneNum: "0836598741",
-    //                         email: "jd@gmail.com"
-    //                     })
-    //                     done()
-    //                 } catch (e) {
-    //                     done(e)
-    //                 }
-    //             })
-    //     })
-    // })
-    // describe("GET /owners/:id", () => {
-    //     describe("when the id is valid", () => {
-    //         it("should return the matching owner", done => {
-    //             request(server)
-    //                 .get(`/owners/${validID}`)
-    //                 .set("Accept", "application/json")
-    //                 .expect("Content-Type", /json/)
-    //                 .expect(200)
-    //                 .end((err, res) => {
-    //                     expect(res.body[0]).to.have.property("firstname", "Mozeeb")
-    //                     expect(res.body[0]).to.have.property("lastname", "Abdulha")
-    //                     done(err)
-    //                 })
-    //         })
-    //     })
-    //     describe("when the id is invalid", () => {
-    //         it("should return the NOT found message", done => {
-    //             request(server)
-    //                 .get("/owners/123")
-    //                 .set("Accept", "application/json")
-    //                 .expect("Content-Type", /json/)
-    //                 .expect(404)
-    //                 .end((err, res) => {
-    //                     expect(res.body.message).include("Owner not found")
-    //                     done(err)
-    //                 })
-    //         })
-    //     })
-    // })
+    describe("GET /owners", () => {
+        it("should GET all the owners", done => {
+            request(server)
+                .get("/owners")
+                .set("Accept", "application/json")
+                .expect("Content-Type", /json/)
+                .expect(200)
+                .end((err, res) => {
+                    try {
+                        expect(res.body).to.be.a("array")
+                        expect(res.body.length).to.equal(2)
+                        let result = _.map(res.body, owner => {
+                            return {
+                                firstname: owner.firstname,
+                                lastname: owner.lastname,
+                                phoneNum: owner.phoneNum,
+                                email: owner.email
+                            }
+                        })
+                        expect(result).to.deep.include({
+                            firstname: "Mozeeb",
+                            lastname: "Abdulha",
+                            phoneNum: "0897456321",
+                            email: "ma@gmail.com"
+                        })
+                        expect(result).to.deep.include({
+                            firstname: "Jack",
+                            lastname: "Dolan",
+                            phoneNum: "0836598741",
+                            email: "jd@gmail.com"
+                        })
+                        done()
+                    } catch (e) {
+                        done(e)
+                    }
+                })
+        })
+    })
+    describe("GET /owners/:id", () => {
+        describe("when the id is valid", () => {
+            it("should return the matching owner", done => {
+                request(server)
+                    .get(`/owners/${validID}`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(res.body[0]).to.have.property("firstname", "Mozeeb")
+                        expect(res.body[0]).to.have.property("lastname", "Abdulha")
+                        done(err)
+                    })
+            })
+        })
+        describe("when the id is invalid", () => {
+            it("should return the NOT found message", done => {
+                request(server)
+                    .get("/owners/123")
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(404)
+                    .end((err, res) => {
+                        expect(res.body.message).include("Owner not found")
+                        done(err)
+                    })
+            })
+        })
+    })
     // describe("Post /owners/", () => {
     //     it("should return a confirm message and update the database", () => {
     //         const owner = {
@@ -225,13 +224,13 @@ describe("Ownerss", () => {
                 .get("/owners/search")
                 .send({
                     "key": "firstname",
-                    "query": "Moz"
+                    "query": "Mozeeb"
                 })
                 .expect(200)
                 .end((err, res) => {
                     try {
                         expect(res.body).to.be.a("array")
-                        expect(res.body.length).to.equal(2)
+                        expect(res.body.length).to.equal(1)
                         let result = _.map(res.body, owner => {
                             return {
                                 firstname: owner.firstname,
@@ -299,7 +298,7 @@ describe("Ownerss", () => {
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
-                    expect(res.body).to.have.property("totalOwners", 4)
+                    expect(res.body).to.have.property("totalOwners", 2)
                     done(err)
                 })
         })

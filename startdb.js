@@ -6,7 +6,7 @@ async function foo() {
         instance: {
             port: 27017, // by default choose any free port
             // eslint-disable-next-line no-undef
-            dbName: process.env.MONGO_DB, //// by default generate random dbName
+            dbName: process.env.MONGO_DB_NAME, //// by default generate random dbName
             dbPath: "./test/database"
         }
     })
