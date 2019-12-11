@@ -26,7 +26,9 @@ app.use(express.urlencoded({
 }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "public")))
-
+if (process.env.NODE_ENV !== "test") {  
+    app.use(logger("dev"))
+}  
 app.use("/", indexRouter)
 app.use("/users", usersRouter)
 
@@ -80,5 +82,28 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500)
     res.render("error")
 })
+
+// development error handler
+// will print stacktrace
+if (app.get("env") === "development") {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500)
+        res.render("error", {
+            message: err.message,
+            error: err
+        })
+    })
+}
+  
+// production error handler
+// no stacktraces leaked to user
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500)
+    res.render("error", {
+        message: err.message,
+        error: {}
+    })
+})
+  
 
 module.exports = app

@@ -89,22 +89,22 @@ describe("Petss", () => {
                     }
                 })
         })
-    })
-    describe("GET /pets/:id", () => {
-        describe("when the id is valid", () => {
-            it("should return the matching pet", done => {
-                request(server)
-                    .get(`/pets/${validID}`)
-                    .set("Accept", "application/json")
-                    .expect("Content-Type", /json/)
-                    .expect(200)
-                    .end((err, res) => {
-                        expect(res.body[0]).to.have.property("name", "Charlie")
-                        expect(res.body[0]).to.have.property("type", "Dog")
-                        done(err)
-                    })
-            })
-        })
+        //})
+        // describe("GET /pets/:id", () => {
+        //     describe("when the id is valid", () => {
+        //         it("should return the matching pet", done => {
+        //             request(server)
+        //                 .get(`/pets/${validID}`)
+        //                 .set("Accept", "application/json")
+        //                 .expect("Content-Type", /json/)
+        //                 .expect(200)
+        //                 .end((err, res) => {
+        //                     expect(res.body[0]).to.have.property("name", "Charlie")
+        //                     expect(res.body[0]).to.have.property("type", "Dog")
+        //                     done(err)
+        //                 })
+        //         })
+        //     })
         describe("when the id is invalid", () => {
             it("should return the NOT found message", done => {
                 request(server)
