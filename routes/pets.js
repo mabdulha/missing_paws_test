@@ -1,7 +1,7 @@
-import Pet from "../models/pets"
-import express from "express"
+let Pet = require("../models/pets")
+let express = require("express")
 let router = express.Router()
-import Fuse from "fuse.js"
+let Fuse = require("fuse.js")
 
 router.findAll = (req, res) => {
     res.setHeader("Content-Type", "application/json")
@@ -52,7 +52,7 @@ router.addPet = (req, res) => {
     pet.age = req.body.age
     pet.lastSeenAddress = req.body.lastSeenAddress
     pet.lastSeenDate = req.body.lastSeenDate
-    pet.ownerID = req.params.id
+    pet.ownerID = req.body.ownerID
 
     pet.save(function (err) {
         if (err) {
@@ -64,6 +64,56 @@ router.addPet = (req, res) => {
             res.json({
                 message: "Pet Added to database",
                 data: pet
+            })
+        }
+    })
+}
+
+router.updatePet = (req, res) => {
+    Pet.findById(req.params.id, function (err, pets) {
+        if (err) {
+            res.status(404).send({
+                message: "Cannot find pet associated with that id",
+                errmsg: err
+            })
+        } else {
+            if (req.body.name) {
+                pets.name = req.body.name
+            }
+            if (req.body.type) {
+                pets.type = req.body.type
+            }
+            if (req.body.species) {
+                pets.species = req.body.species
+            }
+            if (req.body.gender) {
+                pets.gender = req.body.gender
+            }
+            if (req.body.colour) {
+                pets.colour = req.body.colour
+            }
+            if (req.body.size) {
+                pets.size = req.body.size
+            }
+            if (req.body.age) {
+                pets.age = req.body.age
+            }
+            if (req.body.lastSeenAddress) {
+                pets.lastSeenAddress = req.body.lastSeenAddress
+            }
+
+            pets.save(function (err) {
+                if (err) {
+                    res.json({
+                        message: "Pet not updated",
+                        errmsg: err
+                    })
+                } else {
+                    res.json({
+                        message: "Pet updated successfully",
+                        data: pets
+                    })
+                }
             })
         }
     })
@@ -112,7 +162,7 @@ router.updateMissingStatus = (req, res) => {
                     })
                 } else {
                     res.json({
-                        message: "Status updated successfully",
+                        message: "Status updated successfully ",
                         data: pet
                     })
                 }

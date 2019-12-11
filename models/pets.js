@@ -22,7 +22,7 @@ let PetSchema = new mongoose.Schema({
         required: true
     },
     size: {
-        type: String,
+        type: Number,
         required: true
     },
     age: {
@@ -45,7 +45,7 @@ let PetSchema = new mongoose.Schema({
     ownerID: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: "owners"
+        // ref: 'owners'
     }
 }, {
     collection: "pets"

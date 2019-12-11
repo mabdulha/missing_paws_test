@@ -1,8 +1,13 @@
-import Owner from "../models/owners"
-import Pet from "../models/pets"
-import express from "express"
+/* eslint-disable no-undef */
+let Owner = require("../models/owners")
+let Pet = require("../models/pets")
+let express = require("express")
 let router = express.Router()
-import Fuse from "fuse.js"
+let Fuse = require("fuse.js")
+let bcrypt = require("bcryptjs")
+let jwt = require("jsonwebtoken")
+let dotenv = require("dotenv")
+dotenv.config()
 
 router.findAll = (req, res) => {
     res.setHeader("Content-Type", "application/json")
@@ -44,26 +49,88 @@ router.findOne = (req, res) => {
 router.addOwner = (req, res) => {
     res.setHeader("Content-Type", "application/json")
 
-    let owner = new Owner()
-
-    owner.firstname = req.body.firstname
-    owner.lastname = req.body.lastname
-    owner.phoneNum = req.body.phoneNum
-    owner.email = req.body.email
-
-    owner.save(function (err) {
+    bcrypt.hash(req.body.password, 10, (err, hash) => {
         if (err) {
-            res.json({
-                message: "Owner not added",
-                errmsg: err
+            return res.status(500).json({
+                error: err
             })
         } else {
-            res.json({
-                message: "Owner added to database",
-                data: owner
+            let owner = new Owner({
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                phoneNum: req.body.phoneNum,
+                email: req.body.email,
+                password: hash
+            })
+            owner.save(function (err) {
+                if (err) {
+                    res.json({
+                        message: "Owner not added",
+                        errmsg: err
+                    })
+                } else {
+                    res.json({
+                        message: "Owner added to database",
+                        data: owner
+                    })
+                }
             })
         }
     })
+}
+
+router.login = (req, res) => {
+    Owner.findOne({email: req.body.email}).then(owner => {
+        if (owner.length < 1) {
+            // Error 401: Unauthorised
+            return res.status(401).send({
+                message: "Authentification failed, Please ensure the email and password are correct",
+                errmsg: err
+            })
+        }
+        bcrypt.compare(req.body.password, owner.password, (err, result) => {
+            if (err) {
+                return res.status(401).send({
+                    message: "Authentification failed, Please ensure the email and password are correct",
+                    errmsg: err
+                })
+            }
+            /*if (owner) {
+                return res.status(401).send({
+                    message: 'Already logged in',
+                    errmsg: err
+                })
+            }*/
+            if (result) {
+                const payload = {
+                    _id: owner._id,
+                    firstname: owner.firstname,
+                    lastname: owner.lastname,
+                    phoneNum: owner.phoneNum,
+                    email: owner.email
+                }
+
+                const token = jwt.sign(payload, process.env.JWT_KEY, {
+                    expiresIn: "1d"
+                })
+
+                return res.status(200).send({
+                    message: "Successfully Authenticated",
+                    token: token,
+                    owner: payload
+                })
+            }
+            res.status(401).send({
+                message: "Authentification failed, Please ensure the email and password are correct",
+                errmsg: err
+            })
+        })
+    })
+        .catch(err => {
+            res.status(500).send({
+                error: err
+            })
+        })
 }
 
 router.updateOwner = (req, res) => {
@@ -71,7 +138,7 @@ router.updateOwner = (req, res) => {
         if (err) {
             res.status(404).send({
                 message: "Cannot find owner associated with that id",
-                //errmsg: err
+                errmsg: err
             })
         } else {
             if (req.body.firstname) {

@@ -3,42 +3,26 @@
 import chai from "chai"
 const expect = chai.expect
 import request from "supertest"
-const MongoMemoryServer = require("mongodb-memory-server").MongoMemoryServer
 import { MongoClient } from "mongodb"
-import Owner from "../../../models/owners"
+const dotenv = require("dotenv")
+dotenv.config()
 
 const _ = require("lodash")
 
-let server, mongod, url, db, connection, validID
+let server, db, client, collection, validID
 
-describe("Owners", () => {
+describe("Ownerss", () => {
     before(async () => {
         try {
-            mongod = new MongoMemoryServer({
-                instance: {
-                    port: 27017,
-                    dbPath: "./test/database",
-                    dbName: "ownersdb" // by default generate random dbName
-                }
-            })
-            url = await mongod.getConnectionString()
-            connection = await MongoClient.connect(url, {
+            // eslint-disable-next-line no-undef
+            client = await MongoClient.connect(process.env.MONGO_URI, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             })
-            db = connection.db(await mongod.getDbName())
-            // Must wait for DB setup to complete BEFORE starting the API server
+            // eslint-disable-next-line no-undef
+            db = client.db(process.env.MONGO_DB)
+            collection = db.collection("owners")
             server = require("../../../bin/www")
-        } catch (error) {
-            console.log(error)
-        }
-    })
-
-    after(async () => {
-        try {
-            await connection.close()
-            await mongod.stop()
-            await server.close()
         } catch (error) {
             console.log(error)
         }
@@ -46,27 +30,28 @@ describe("Owners", () => {
 
     beforeEach(async () => {
         try {
-            await Owner.deleteMany({})
-            let owner = new Owner()
-            owner.firstname = "Mozeeb"
-            owner.lastname = "Abdulha"
-            owner.phoneNum = "0897456321"
-            owner.email = "ma@gmail.com"
-            await owner.save()
-            owner = new Owner()
-            owner.firstname = "Jack"
-            owner.lastname = "Dolan"
-            owner.phoneNum = "0836598741"
-            owner.email = "jd@gmail.com"
-            await owner.save()
-            owner = await Owner.findOne({
-                lastname: "Abdulha"
+            await collection.deleteMany({})
+            await collection.insertOne({
+                firstname: "Mozeeb",
+                lastname: "Abdulha",
+                phoneNum: "0897456321",
+                email: "ma@gmail.com",
+                password: "secret123"
             })
+            await collection.insertOne({
+                firstname: "Jack",
+                lastname: "Dolan",
+                phoneNum: "0836598741",
+                email: "jd@gmail.com",
+                password: "helloworld"
+            })
+            const owner = await collection.findOne({lastname: "Abdulha"})
             validID = owner._id
         } catch (error) {
             console.log(error)
         }
     })
+
     describe("GET /owners", () => {
         it("should GET all the owners", done => {
             request(server)
@@ -77,7 +62,7 @@ describe("Owners", () => {
                 .end((err, res) => {
                     try {
                         expect(res.body).to.be.a("array")
-                        expect(res.body.length).to.equal(2)
+                        expect(res.body.length).to.equal(3)
                         let result = _.map(res.body, owner => {
                             return {
                                 firstname: owner.firstname,
@@ -134,33 +119,33 @@ describe("Owners", () => {
             })
         })
     })
-    // describe("Post /owners", () => {
-    //     it("should return a confirm message and update the database", () => {
-    //         const owner = {
-    //             firstname: "Mike",
-    //             lastname: "Doyle",
-    //             phoneNum: "0123654789",
-    //             email: "md@gmail.com"
-    //         }
-    //         return request(server)
-    //             .post("/owners")
-    //             .send(owner)
-    //             .expect(200)
-    //             .then(res => {
-    //                 expect(res.body.message).equal("Owner added to database")
-    //                 validID = res.body.data._id
-    //             })
-    //     })
-    //     after(() => {
-    //         return request(server)
-    //             .get(`/owners/${validID}`)
-    //             .expect(200)
-    //             .then(res => {
-    //                 expect(res.body[0]).to.have.property("firstname", "Mike")
-    //                 expect(res.body[0]).to.have.property("email", "md@gmail.com")
-    //             })
-    //     })
-    // })
+    describe("Post /owners/", () => {
+        it("should return a confirm message and update the database", () => {
+            const owner = {
+                firstname: "Mike",
+                lastname: "Doyle",
+                phoneNum: "0123654789",
+                email: "md@gmail.com"
+            }
+            return request(server)
+                .post("/owners/")
+                .send(owner)
+                .expect(200)
+                .then(res => {
+                    expect(res.body.message).equal("Owner added to database")
+                    validID = res.body.data._id
+                })
+        })
+        after(() => {
+            return request(server)
+                .get(`/owners/${validID}`)
+                .expect(200)
+                .then(res => {
+                    expect(res.body[0]).to.have.property("firstname", "Mike")
+                    expect(res.body[0]).to.have.property("email", "md@gmail.com")
+                })
+        })
+    })
     describe("PUT /owners/:id/update", () => {
         describe("when the id is valid", () => {
             it("should return a message and update owner details", () => {
@@ -314,7 +299,7 @@ describe("Owners", () => {
                 .expect("Content-Type", /json/)
                 .expect(200)
                 .end((err, res) => {
-                    expect(res.body).to.have.property("totalOwners", 2)
+                    expect(res.body).to.have.property("totalOwners", 3)
                     done(err)
                 })
         })

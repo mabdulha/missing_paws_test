@@ -10,6 +10,7 @@ let indexRouter = require("./routes/index")
 let usersRouter = require("./routes/users")
 const owners = require("./routes/owners")
 const pets = require("./routes/pets")
+const cors = require("cors")
 
 let app = express()
 
@@ -19,6 +20,7 @@ app.set("view engine", "ejs")
 
 app.use(logger("dev"))
 app.use(express.json())
+app.use(cors())
 app.use(express.urlencoded({
     extended: false
 }))
@@ -39,26 +41,29 @@ app.get("/pets/total", pets.findTotalNumberOfPets)
 app.get("/pets/views", pets.findTotalViews)
 app.get("/pets/:id", pets.findOne)
 
-app.post("/owners/:id/pets", pets.addPet)
+app.post("/pets", pets.addPet)
 
 app.put("/pets/:id/view", pets.incrementViews)
 app.put("/pets/:id/status", pets.updateMissingStatus)
+app.put("/pets/:id/update", pets.updatePet)
 
 app.delete("/pets/:id", pets.deletePet)
 
 // routes for owners
 app.get("/owners", owners.findAll)
 app.get("/owners/:id/pets", owners.findPetsAssociatedWithOwner)
-app.get("/owners/total", owners.findTotalNumberOfOwners)
 app.get("/owners/search", owners.searchOwner)
+app.get("/owners/total", owners.findTotalNumberOfOwners)
 app.get("/owners/:id/pets/total", owners.findNumberOfPetsPerOwner)
 app.get("/owners/:id", owners.findOne)
 
-app.post("/owners/", owners.addOwner)
+app.post("/owners/register", owners.addOwner)
+app.post("/owners/login", owners.login)
 
 app.put("/owners/:id/update", owners.updateOwner)
 
 app.delete("/owners/:id", owners.deleteOwner)
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

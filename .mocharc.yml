@@ -1,7 +1,5 @@
 file:
-    - test/functional/api/ownersTest.js
     - test/functional/api/petsTest.js
-    - test/functional/api/relationshipTest.js
 require: '@babel/register'
-timeout: 6000
+timeout: 8000
 exit: true
