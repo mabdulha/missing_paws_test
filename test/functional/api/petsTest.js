@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable no-unused-vars */
 const chai = require("chai")
 const expect = chai.expect
 const request = require("supertest")
@@ -11,15 +9,13 @@ const _ = require("lodash")
 
 let server, db, client, collection, validID
 
-describe("Petss", function() {
-    before(async function() {
+describe("Petss", () => {
+    before(async () => {
         try {
-            // eslint-disable-next-line no-undef
             client = await MongoClient.connect(process.env.MONGO_URI, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
             })
-            // eslint-disable-next-line no-undef
             db = client.db(process.env.MONGO_DB)
             collection = db.collection("pets")
             server = require("../../../bin/www")
@@ -56,7 +52,7 @@ describe("Petss", function() {
                 missing: false,
                 ownerID: "5db4bbff17b11a286ca061ff"
             })
-            const pet = await collection.findOne({ name: "Tweety" })
+            const pet = await collection.findOne({ size: 5 })
             validID = pet._id
         } catch (error) {
             console.log(error)
@@ -71,22 +67,22 @@ describe("Petss", function() {
                 .expect(200)
                 .end((err, res) => {
                     try {
-                        //                 expect(res.body).to.be.a("array")
-                        //                 expect(res.body.length).to.equal(2)
-                        //                 let result = _.map(res.body, pet => {
-                        //                     return {
-                        //                         name: pet.name,
-                        //                         type: pet.type
-                        //                     }
-                        //                 })
-                        //                 expect(result).to.deep.include({
-                        //                     name: "Charlie",
-                        //                     type: "Dog",
-                        //                 })
-                        //                 expect(result).to.deep.include({
-                        //                     name: "Tweety",
-                        //                     type: "Bird",
-                        //                 })
+                        expect(res.body).to.be.a("array")
+                        expect(res.body.length).to.equal(2)
+                        let result = _.map(res.body, pet => {
+                            return {
+                                name: pet.name,
+                                type: pet.type
+                            }
+                        })
+                        expect(result).to.deep.include({
+                            name: "Charlie",
+                            type: "Dog",
+                        })
+                        expect(result).to.deep.include({
+                            name: "Tweety",
+                            type: "Bird",
+                        })
                         done()
                     } catch (e) {
                         done(e)
@@ -94,35 +90,35 @@ describe("Petss", function() {
                 })
         })
     })
-    // describe("GET /pets/:id", () => {
-    //     describe("when the id is valid", () => {
-    //         it("should return the matching pet", done => {
-    //             request(server)
-    //                 .get(`/pets/${validID}`)
-    //                 .set("Accept", "application/json")
-    //                 .expect("Content-Type", /json/)
-    //                 .expect(200)
-    //                 .end((err, res) => {
-    //                     expect(res.body[0]).to.have.property("name", "Charlie")
-    //                     expect(res.body[0]).to.have.property("type", "Dog")
-    //                     done(err)
-    //                 })
-    //         })
-    //     })
-    // describe("when the id is invalid", () => {
-    //     it("should return the NOT found message", done => {
-    //         request(server)
-    //             .get("/pets/123")
-    //             .set("Accept", "application/json")
-    //             .expect("Content-Type", /json/)
-    //             .expect(404)
-    //             .end((err, res) => {
-    //                 expect(res.body.message).include("Pet not found")
-    //                 done(err)
-    //             })
-    //     })
-    // })
-    // })
+    describe("GET /pets/:id", () => {
+        describe("when the id is valid", () => {
+            it("should return the matching pet", done => {
+                request(server)
+                    .get(`/pets/${validID}`)
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .end((err, res) => {
+                        expect(res.body[0]).to.have.property("name", "Charlie")
+                        expect(res.body[0]).to.have.property("type", "Dog")
+                        done(err)
+                    })
+            })
+        })
+        describe("when the id is invalid", () => {
+            it("should return the NOT found message", done => {
+                request(server)
+                    .get("/pets/123")
+                    .set("Accept", "application/json")
+                    .expect("Content-Type", /json/)
+                    .expect(404)
+                    .end((err, res) => {
+                        expect(res.body.message).include("Pet not found")
+                        done(err)
+                    })
+            })
+        })
+    })
     // describe("PUT /pets/:id/view", () => {
     //     describe("when the id is valid", () => {
     //         it("should return a message and the view should increase by 1", () => {
