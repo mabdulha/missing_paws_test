@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
-import chai from "chai"
+const chai = require("chai")
 const expect = chai.expect
-import request from "supertest"
-import { MongoClient } from "mongodb"
+const request = require("supertest")
+const { MongoClient } = require("mongodb")
 const dotenv = require("dotenv")
 dotenv.config()
 
