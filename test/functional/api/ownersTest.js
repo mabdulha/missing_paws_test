@@ -118,7 +118,7 @@ describe("Ownerss", () => {
             })
         })
     })
-    describe("Post /owners/", () => {
+    /* describe("Post /owners/", () => {
         it("should return a confirm message and update the database", () => {
             const owner = {
                 firstname: "Mike",
@@ -145,7 +145,7 @@ describe("Ownerss", () => {
                     expect(res.body[0]).to.have.property("email", "md@gmail.com")
                 })
         })
-    })
+    }) */
     describe("PUT /owners/:id/update", () => {
         describe("when the id is valid", () => {
             it("should return a message and update owner details", () => {
