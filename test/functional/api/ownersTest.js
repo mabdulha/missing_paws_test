@@ -193,7 +193,7 @@ describe("Ownerss", () => {
             })
         })
     }) */
-    /* describe("Delete /owners/:id", () => {
+    describe("Delete /owners/:id", () => {
         describe("when the id is valid", () => {
             it("should return a message when the owner is deleted", () => {
                 return request(server)
@@ -218,7 +218,7 @@ describe("Ownerss", () => {
                     })
                 })
         })
-    }) */
+    })
     describe("GET /owners/search", () => {
         it("should return the queried owner", done => {
             request(server)

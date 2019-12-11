@@ -65,7 +65,7 @@ app.post("/owners/login", owners.login)
 
 app.put("/owners/:id/update", owners.updateOwner)
 
-// app.delete("/owners/:id", owners.deleteOwner)
+app.delete("/owners/:id", owners.deleteOwner)
 
 
 // catch 404 and forward to error handler
